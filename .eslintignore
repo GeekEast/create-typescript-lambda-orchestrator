@@ -1,0 +1,8 @@
+node_modules
+coverage
+dist
+*.lock
+*.log
+*.mjs
+db/**/*.js
+*.js

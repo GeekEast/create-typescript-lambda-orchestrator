@@ -1,0 +1,65 @@
+service: create-typescript-lambda-orchestrator
+
+frameworkVersion: '3'
+
+useDotenv: true
+
+plugins:
+  - serverless-offline-sqs
+  - serverless-offline
+  - serverless-offline-aws-eventbridge
+
+provider:
+  name: aws
+  region: ${env:REGION}
+  stage: ${env:STAGE}
+  runtime: nodejs14.x
+  lambdaHashingVersion: 20201221
+
+custom:
+  serverless-offline:
+    noPrependStageInUrl: true
+    lambdaPort: 3001
+    httpPort: 3011
+  serverless-offline-sqs:
+    autoCreate: true
+    endpoint: ${env:LOCALSTACK_EDGE_ENDPOINT}
+    region: ${env:REGION}
+    skipCacheInvalidation: false
+  serverless-offline-aws-eventbridge:
+    port: 5201 # send events to this port
+    debug: true
+    account: ${env:STAGE}
+    pubSubPort: 4011
+
+functions:
+  eventHandler:
+    handler: dist/index.handler
+    events:
+      - sqs:
+          arn: ${env:OFFLINE_QUEUE_ARN}
+
+  eventBridgeToSQS:
+    handler: ./local/event.sendToSQS
+    events:
+      - eventBridge:
+          eventBus: ${env:OFFLINE_EVENT_BUS_NAME}
+          pattern:
+            source:
+              - ${env:OFFLINE_EVENT_SOURCE}
+
+  eventLogger:
+    handler: ./local/event.eventBridgeLogger
+    events:
+      - eventBridge:
+          eventBus: ${env:OFFLINE_EVENT_BUS_NAME}
+          pattern:
+            source:
+              - ${env:OFFLINE_EVENT_SOURCE}
+
+resources:
+  Resources:
+    Queue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${env:OFFLINE_QUEUE_NAME}

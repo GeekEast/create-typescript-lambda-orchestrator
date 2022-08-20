@@ -1,0 +1,78 @@
+{
+  "name": "create-typescript-lambda-orchestrator",
+  "version": "1.0.0",
+  "description": "The lambda orchestrator based on TypeScript",
+  "main": "dist/index.js",
+  "author": "James Tan",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=14.17.0"
+  },
+  "scripts": {
+    "build": "rimraf dist && ncc build src/index.ts -o dist -m -s -q",
+    "dev": "rimraf dist && env-cmd -f .env.local tsc-watch -p tsconfig.json --onSuccess \"sls offline --config serverless.yml\"",
+    "stack": "env-cmd -f .env.local yarn zx ./local/stack.mjs",
+    "test:watch": "env-cmd -f .env.test jest --coverage --forceExit --runInBand --detectOpenHandles --watch",
+    "test:clean": "jest --clearCache",
+    "test": "env-cmd -f .env.test jest --coverage --forceExit --runInBand --detectOpenHandles --no-caches --passWithNoTests",
+    "fmt:all": "yarn fmt:lint \"./**/*.{ts,js}\" && yarn fmt:prettier \"./**/*.{ts,js}\"",
+    "fmt:lint": "eslint --fix",
+    "fmt:prettier": "prettier --write --config .prettierrc.js",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-cloudwatch-events": "^3.154.0",
+    "@aws-sdk/client-sqs": "^3.154.0",
+    "@commitlint/cli": "16.2.3",
+    "@commitlint/config-conventional": "16.2.1",
+    "@types/aws-lambda": "^8.10.102",
+    "@types/axios": "0.14.0",
+    "@types/debug": "^4.1.7",
+    "@types/deep-equal": "^1.0.1",
+    "@types/jest": "^27.4.1",
+    "@types/node": "14.17.0",
+    "@types/prettyjson": "0.0.30",
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1",
+    "@vercel/ncc": "0.33.3",
+    "aws-lambda": "^1.0.7",
+    "deep-equal": "^2.0.5",
+    "env-cmd": "^10.1.0",
+    "eslint": "^8.11.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "husky": "^7.0.4",
+    "jest": "^27.5.1",
+    "lint-staged": "12.3.7",
+    "prettier": "^2.6.0",
+    "prettyjson": "1.2.5",
+    "rimraf": "^3.0.2",
+    "serverless": "^3.8.0",
+    "serverless-offline": "^8.5.0",
+    "serverless-offline-aws-eventbridge": "1.6.6",
+    "serverless-offline-sqs": "6.0.0",
+    "ts-jest": "^27.1.3",
+    "ts-node": "^10.9.1",
+    "tsc-watch": "^5.0.3",
+    "typescript": "^4.7.4",
+    "zx": "4.3.0"
+  },
+  "dependencies": {
+    "axios": "0.27.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.13.2",
+    "debug": "^4.3.4",
+    "fast-safe-stringify": "2.1.1",
+    "reflect-metadata": "^0.1.13",
+    "typedi": "^0.10.0"
+  },
+  "lint-staged": {
+    "./**/*.{js,ts}": [
+      "yarn fmt:lint",
+      "yarn fmt:prettier"
+    ]
+  }
+}
