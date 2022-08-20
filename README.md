@@ -1,5 +1,7 @@
 
 # create-typescript-lambda-orchestrator
+<p align="center"><img style="display: block; width: 600px; margin: 0 auto;" src=img/2022-08-20-11-42-49.png alt="no image found"></p>
+
 
 ## Customize
 - search `create-typescript-lambda-orchestrator` globally and replace with whatever you like as your **project name**
