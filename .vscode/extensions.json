@@ -1,3 +1,6 @@
 {
-  "recommendations": ["irongeek.vscode-env", "ms-azuretools.vscode-docker"]
+  "recommendations": [
+    "irongeek.vscode-env",
+    "ms-azuretools.vscode-docker"
+  ]
 }

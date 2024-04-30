@@ -11,13 +11,13 @@
 ## Start
 ```sh
 # install deps
-yarn
+pnpm install
 # start localstack
-yarn stack up
+pnpm stack up
 # start serverless (lambda function)
-yarn dev
+pnpm dev
 # send a test event to eventBus
-yarn stack event:send
+pnpm stack event:send
 ```
 
 ## Register Tasks
